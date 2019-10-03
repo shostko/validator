@@ -28,7 +28,7 @@ abstract class Validator<T> : Validation.Delegate<T>() {
         override fun validate(value: T) = function(value)
     }
 
-    class SimplePredicate<T>(private val message: String?, private val function: (T) -> Boolean) : Predicate<T>() {
+    class SimplePredicate<T>(message: String?, private val function: (T) -> Boolean) : Predicate<T>(message) {
         constructor(function: (T) -> Boolean) : this(null, function)
 
         override fun isValid(value: T): Boolean = function(value)
