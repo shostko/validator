@@ -1,15 +1,26 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-android {
-    compileSdkVersion 29
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 29
-        versionCode 1
-        versionName "0.1"
-    }
+apply plugin: 'com.novoda.bintray-release'
 
+publish {
+    userOrg = 'shostko'
+    repoName = 'android'
+    groupId = 'by.shostko'
+    artifactId = 'rx-validation-errors'
+    publishVersion = rootProject.ext.versionName
+    desc = 'Reactive Validaation'
+    website = 'https://github.com/shostko/rx-validation'
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+    }
     buildTypes {
         release {
             minifyEnabled false
