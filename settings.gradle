@@ -1,2 +1,2 @@
-include ':sample', ':rx-validation', ':rx-validation-validators'
+include ':sample', ':rx-validation', ':rx-validation-validators', ':rx-validation-errors'
 rootProject.name='RxValidation'
