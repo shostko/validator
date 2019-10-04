@@ -24,14 +24,18 @@ abstract class Validator<T> : Validation.Delegate<T>() {
         protected abstract fun isValid(value: T): Boolean
     }
 
-    class SimpleAction<T>(private val function: (T) -> Unit) : Validator<T>() {
+    private class SimpleAction<T>(private val function: (T) -> Unit) : Validator<T>() {
         override fun validate(value: T) = function(value)
     }
 
-    class SimplePredicate<T>(message: String?, private val function: (T) -> Boolean) : Predicate<T>(message) {
-        constructor(function: (T) -> Boolean) : this(null, function)
-
+    private class SimplePredicate<T>(message: String?, private val function: (T) -> Boolean) : Predicate<T>(message) {
         override fun isValid(value: T): Boolean = function(value)
+    }
+
+    companion object {
+        fun <T> predicate(message: String?, function: (T) -> Boolean): Validator<T> = SimplePredicate(message, function)
+        fun <T> predicate(function: (T) -> Boolean): Validator<T> = SimplePredicate(null, function)
+        fun <T> simple(function: (T) -> Unit): Validator<T> = SimpleAction(function)
     }
 }
 
@@ -45,6 +49,6 @@ private class IterableValidator<T>(private val validators: Iterable<Validator<in
 
 fun <T> validators(vararg validators: Validator<in T>): Validator<T> = CompositeValidator(*validators)
 
-fun <T> validators(vararg validators: (T) -> Boolean): Validator<T> = IterableValidator(validators.map { Validator.SimplePredicate(it) })
+fun <T> validators(vararg validators: (T) -> Boolean): Validator<T> = IterableValidator(validators.map(Validator.Companion::predicate))
 
 fun <T> validators(validators: Iterable<Validator<in T>>): Validator<T> = IterableValidator(validators)
