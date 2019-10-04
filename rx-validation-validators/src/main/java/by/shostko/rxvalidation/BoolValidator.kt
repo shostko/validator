@@ -20,12 +20,12 @@ class NegativeValidator(private val message: String? = null) : Validator<Boolean
     }
 }
 
-object AlwaysSuccessValidator : Validator<Boolean>() {
-    override fun validate(value: Boolean) {}
+class AlwaysSuccessValidator<T> : Validator<T>() {
+    override fun validate(value: T) {}
 }
 
-object AlwaysFailValidator : Validator<Boolean>() {
-    override fun validate(value: Boolean) {
+class AlwaysFailValidator<T> : Validator<T>() {
+    override fun validate(value: T) {
         throw BoolValidationException("This validation always fails")
     }
 }
