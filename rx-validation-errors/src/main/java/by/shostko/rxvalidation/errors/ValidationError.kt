@@ -11,6 +11,6 @@ open class ValidationError(code: ErrorCode) : Error.Custom(code) {
     override fun toString(): String = "Validation${super.toString()}"
 }
 
-open class BaseValidationErrorCode(domain: Class<out Validator<*>>, text: String?) : SimpleErrorCode(domain, null, text) {
+open class BaseValidationErrorCode(domain: Class<out Validator<*>>, text: String?) : SimpleErrorCode(domain, null, text, null) {
     constructor(validator: Validator<*>, text: String?) : this(validator.javaClass, text)
 }
