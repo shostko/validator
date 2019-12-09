@@ -37,3 +37,7 @@ dependencies {
 
     compileOnly 'by.shostko:error:0.3.1'
 }
+
+afterEvaluate {
+    generateReleaseBuildConfig.enabled = false
+}
