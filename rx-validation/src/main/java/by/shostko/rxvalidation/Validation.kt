@@ -2,7 +2,6 @@
 
 package by.shostko.rxvalidation
 
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Observer
 import io.reactivex.Single
@@ -20,22 +19,22 @@ abstract class AbsValidation<T> {
         get() = result.map(ValidationResult::isValid)
 }
 
-abstract class BaseValidation<T>(private val validator: (T) -> Completable) : AbsValidation<T>() {
+abstract class BaseValidation<T> internal constructor(private val validator: (T) -> Flowable<Boolean>) : AbsValidation<T>() {
     final override val result: Flowable<ValidationResult> by lazy {
-        value.switchMapSingle {
+        value.switchMap {
             validator(it)
-                    .toSingleDefault(ValidationResult.Valid as ValidationResult)
-                    .onErrorReturn { th -> ValidationResult.Invalid(th) }
+                .map { result -> if (result) ValidationResult.Valid else ValidationResult.Invalid(null) }
+                .onErrorReturn { th -> ValidationResult.Invalid(th) }
         }.share()
     }
 }
 
 open class Validation<T> private constructor(
-        private val processor: FlowableProcessor<T>,
-        validator: (T) -> Completable
+    private val processor: FlowableProcessor<T>,
+    validator: (T) -> Flowable<Boolean>
 ) : BaseValidation<T>(validator), Subscriber<T> by processor, Observer<T> {
-    constructor(validator: (T) -> Completable) : this(BehaviorProcessor.create<T>(), validator)
-    constructor(validator: Validator<T>) : this(BehaviorProcessor.create<T>(), { validator.validateAsCompletable(it) })
+    constructor(validator: (T) -> Flowable<Boolean>) : this(BehaviorProcessor.create<T>(), validator)
+    constructor(validator: Validator<T>) : this(BehaviorProcessor.create<T>(), { validator.validateAsFlowable(it) })
 
     override val value: Flowable<T>
         get() = processor.hide()
@@ -48,7 +47,7 @@ open class Validation<T> private constructor(
 
     class Predicate<T>(validator: (T) -> Single<Boolean>) : Validation<T>({
         Single.defer { validator(it) }
-                .flatMapCompletable { if (it) Completable.complete() else Completable.error(ValidationException()) }
+            .toFlowable()
     })
 
     abstract class Delegate<T> : ReadOnlyProperty<Any, Validation<T>> {

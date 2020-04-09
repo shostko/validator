@@ -3,6 +3,7 @@
 package by.shostko.rxvalidation
 
 import io.reactivex.Completable
+import io.reactivex.Flowable
 
 abstract class Validator<T> : Validation.Delegate<T>() {
 
@@ -13,6 +14,8 @@ abstract class Validator<T> : Validation.Delegate<T>() {
         get() = this
 
     internal fun validateAsCompletable(value: T): Completable = Completable.fromAction { validate(value) }
+
+    internal fun validateAsFlowable(value: T): Flowable<Boolean> = validateAsCompletable(value).asValidationFlowable()
 
     abstract class Predicate<T>(private val message: String? = null) : Validator<T>() {
         final override fun validate(value: T) {
@@ -77,3 +80,5 @@ fun <T> validators(vararg validators: Validator<in T>): Validator<T> = Composite
 fun <T> validators(vararg validators: (T) -> Boolean): Validator<T> = IterableValidator(validators.map(Validator.Companion::predicate))
 
 fun <T> validators(validators: Iterable<Validator<in T>>): Validator<T> = IterableValidator(validators)
+
+internal fun Completable.asValidationFlowable(): Flowable<Boolean> = toSingleDefault(true).toFlowable()
