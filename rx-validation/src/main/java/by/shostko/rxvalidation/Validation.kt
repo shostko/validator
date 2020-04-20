@@ -19,21 +19,19 @@ abstract class AbsValidation<T> {
         get() = result.map(ValidationResult::isValid)
 }
 
-abstract class BaseValidation<T> internal constructor(private val validator: (T) -> Flowable<Boolean>) : AbsValidation<T>() {
+abstract class BaseValidation<T> internal constructor(private val validator: (T) -> Flowable<ValidationResult>) : AbsValidation<T>() {
     final override val result: Flowable<ValidationResult> by lazy {
         value.switchMap {
-            validator(it)
-                .map { result -> if (result) ValidationResult.Valid else ValidationResult.Invalid(null) }
-                .onErrorReturn { th -> ValidationResult.Invalid(th) }
+            validator(it).onErrorReturn { throwable -> ValidationResult.Invalid(throwable) }
         }.share()
     }
 }
 
 open class Validation<T> private constructor(
     private val processor: FlowableProcessor<T>,
-    validator: (T) -> Flowable<Boolean>
+    validator: (T) -> Flowable<ValidationResult>
 ) : BaseValidation<T>(validator), Subscriber<T> by processor, Observer<T> {
-    constructor(validator: (T) -> Flowable<Boolean>) : this(BehaviorProcessor.create<T>(), validator)
+    constructor(validator: (T) -> Flowable<ValidationResult>) : this(BehaviorProcessor.create<T>(), validator)
     constructor(validator: Validator<T>) : this(BehaviorProcessor.create<T>(), { validator.validateAsFlowable(it) })
 
     override val value: Flowable<T>
@@ -46,8 +44,7 @@ open class Validation<T> private constructor(
     }
 
     class Predicate<T>(validator: (T) -> Single<Boolean>) : Validation<T>({
-        Single.defer { validator(it) }
-            .toFlowable()
+        validator(it).map { result -> ValidationResult.from(result) }.toFlowable()
     })
 
     abstract class Delegate<T> : ReadOnlyProperty<Any, Validation<T>> {

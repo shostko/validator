@@ -15,7 +15,7 @@ abstract class Validator<T> : Validation.Delegate<T>() {
 
     internal fun validateAsCompletable(value: T): Completable = Completable.fromAction { validate(value) }
 
-    internal fun validateAsFlowable(value: T): Flowable<Boolean> = validateAsCompletable(value).asValidationFlowable()
+    internal fun validateAsFlowable(value: T): Flowable<ValidationResult> = validateAsCompletable(value).asValidationFlowable()
 
     abstract class Predicate<T>(private val message: String? = null) : Validator<T>() {
         final override fun validate(value: T) {
@@ -81,4 +81,4 @@ fun <T> validators(vararg validators: (T) -> Boolean): Validator<T> = IterableVa
 
 fun <T> validators(validators: Iterable<Validator<in T>>): Validator<T> = IterableValidator(validators)
 
-internal fun Completable.asValidationFlowable(): Flowable<Boolean> = toSingleDefault(true).toFlowable()
+internal fun Completable.asValidationFlowable(): Flowable<ValidationResult> = toSingleDefault(ValidationResult.Valid as ValidationResult).toFlowable()
