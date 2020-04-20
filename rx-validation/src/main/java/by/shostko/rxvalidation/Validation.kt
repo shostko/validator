@@ -81,6 +81,8 @@ sealed class ValidationResult {
 
     fun isValid(): Boolean = this === Valid
 
+    fun getReason(): Throwable? = if (this is Invalid) this.throwable else null
+
     companion object {
         fun from(valid: Boolean) = if (valid) Valid else Invalid()
     }
