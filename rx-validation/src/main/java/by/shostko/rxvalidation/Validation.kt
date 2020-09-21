@@ -14,15 +14,19 @@ import kotlin.reflect.KProperty
 
 abstract class AbsValidation<T> {
     abstract val value: Flowable<T>
-    abstract val result: Flowable<ValidationResult>
+    abstract val event: Flowable<ValidationEvent<T>>
+    val result: Flowable<ValidationResult>
+        get() = event.map(ValidationEvent<*>::result)
     val isValid: Flowable<Boolean>
-        get() = result.map(ValidationResult::isValid)
+        get() = event.map(ValidationEvent<*>::isValid)
 }
 
 abstract class BaseValidation<T> internal constructor(private val validator: (T) -> Flowable<ValidationResult>) : AbsValidation<T>() {
-    final override val result: Flowable<ValidationResult> by lazy {
+    final override val event: Flowable<ValidationEvent<T>> by lazy {
         value.switchMap {
-            validator(it).onErrorReturn { throwable -> ValidationResult.Invalid(throwable) }
+            validator(it)
+                .onErrorReturn { throwable -> ValidationResult.Invalid(throwable) }
+                .map { result -> ValidationEvent(it, result) }
         }.share()
     }
 }
@@ -64,6 +68,14 @@ open class Validation<T> private constructor(
             return value!!
         }
     }
+}
+
+data class ValidationEvent<T>(
+    val value: T,
+    val result: ValidationResult
+) {
+    fun isValid() = result.isValid()
+    fun getReason() = result.getReason()
 }
 
 sealed class ValidationResult {
