@@ -33,9 +33,9 @@ dependencies {
 
     compileOnly project(':rx-validation')
 
-    compileOnly 'io.reactivex.rxjava2:rxjava:2.2.11'
+    compileOnly 'io.reactivex.rxjava2:rxjava:2.2.19'
 
-    compileOnly 'by.shostko:error:0.5'
+    compileOnly 'by.shostko:error:0.6.3'
 }
 
 afterEvaluate {
