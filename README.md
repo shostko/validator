@@ -1,6 +1,8 @@
-# RxValidation
+# Validator
 
-[![Maven Central](https://img.shields.io/maven-central/v/by.shostko/rx-validation?style=flat)](#integration) [![API-level](https://img.shields.io/badge/API-14+-blue?style=flat&logo=android)](https://source.android.com/setup/start/build-numbers) [![License](https://img.shields.io/badge/license-Apach%202.0-green?style=flat)](#license) 
+![Foreman Logo](/assets/play-store.png)
+
+[![Maven Central](https://img.shields.io/maven-central/v/by.shostko/validator?style=flat)](#integration) [![API-level](https://img.shields.io/badge/API-21+-blue?style=flat&logo=android)](https://source.android.com/setup/start/build-numbers) [![License](https://img.shields.io/badge/license-Apach%202.0-green?style=flat)](#license)
 
 ## How to use
 
@@ -8,29 +10,10 @@
 
 ## Integration
 
-The library is now available in Maven Central repository:
+The library is available in Maven Central repository:
 ```gradle
 dependencies {
-    implementation 'by.shostko:rx-validation:0.+'
-
-    // ADD
-    // collection of implemented validators that throws simple Exception
-    implementation 'by.shostko:rx-validation-validators:0.+'
-    // OR
-    // collection of implemented validators that throws Errors
-    // see https://github.com/shostko/errors
-    implementation 'by.shostko:rx-validation-errors:0.+'
-}
-```
-
-Also don't forget to additional mandatory dependencies:
-```gradle
-dependencies {
-    // for base module
-    implementation 'io.reactivex.rxjava2:rxjava:2.+'
-
-    // for errors module integration
-    implementation 'by.shostko:error:0.+'
+    implementation 'by.shostko:validator:0.+'
 }
 ```
 
