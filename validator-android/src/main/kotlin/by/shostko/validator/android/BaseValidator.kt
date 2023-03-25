@@ -9,8 +9,8 @@ class ValidationException internal constructor(
     @StringRes internal val reason: Int,
     cause: Throwable? = null,
 ) : RuntimeException(
-    message = "ResourceValidationException($tag: $reason)", // TODO extract name from resource
-    cause = cause,
+    "ResourceValidationException($tag: $reason)", // TODO extract name from resource
+    cause,
 )
 
 abstract class BaseValidator<T : Any?> internal constructor(

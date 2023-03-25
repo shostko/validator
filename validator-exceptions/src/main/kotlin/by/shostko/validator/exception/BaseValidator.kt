@@ -8,12 +8,12 @@ class ValidationException internal constructor(
     reason: String?,
     cause: Throwable? = null,
 ) : RuntimeException(
-    message = if (tag.isNullOrBlank()) {
+    if (tag.isNullOrBlank()) {
         reason
     } else {
         "$tag: $reason"
     },
-    cause = cause,
+    cause,
 )
 
 abstract class BaseValidator<T : Any?> internal constructor(
