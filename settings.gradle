@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name='validator'
-include ':sample', ':validator-core'
+include ':sample', ':validator-core', ':validator-exceptions'
