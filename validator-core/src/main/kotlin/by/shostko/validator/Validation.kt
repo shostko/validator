@@ -19,6 +19,7 @@ class Validation<T : Any?, R : Any?>(
         .map { it.value }
 
     // TODO switch to provided scope?
+    // TODO catch errors here and map to Invalid result?
     val resultFlow: Flow<ValidationResult<T, R>> = valueFlow.map(validator)
 
     private var _value: Holder<T> = Holder.Initial()
@@ -37,6 +38,10 @@ class Validation<T : Any?, R : Any?>(
                 throw UnsupportedOperationException("Value was not yet provided!")
             }
         }
+
+    fun onNewValue(value: T) {
+        _value = Holder.WithValue(value)
+    }
 }
 
 private sealed class Holder<T : Any?> {
