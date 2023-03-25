@@ -25,7 +25,6 @@ class EmptyCollectionValidator<T>(
 }
 
 class SizeValidator<T>(
-    initial: Collection<T>,
     private val expectedSize: Int,
     private val tag: String? = null,
     private val reason: ((Collection<T>) -> String?)? = null,
