@@ -4,8 +4,8 @@ import by.shostko.validator.DelegatedValidator
 import by.shostko.validator.ValidationResult
 
 class ValidationException internal constructor(
-    tag: String?,
-    reason: String?,
+    val tag: String?,
+    val reason: String?,
     cause: Throwable? = null,
 ) : RuntimeException(
     if (tag.isNullOrBlank()) {
@@ -24,6 +24,8 @@ abstract class BaseValidator<T : Any?> internal constructor(
         try {
             validate(value)
             ValidationResult.valid(value)
+        } catch (e: ValidationException) {
+            ValidationResult.invalid(value, e.reason ?: "")
         } catch (th: Throwable) {
             ValidationResult.invalid(value, th.message ?: "")
         }

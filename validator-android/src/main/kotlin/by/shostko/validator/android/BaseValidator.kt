@@ -5,8 +5,8 @@ import by.shostko.validator.DelegatedValidator
 import by.shostko.validator.ValidationResult
 
 class ValidationException internal constructor(
-    tag: String?,
-    @StringRes internal val reason: Int,
+    val tag: String?,
+    @StringRes val reason: Int,
     cause: Throwable? = null,
 ) : RuntimeException(
     "ResourceValidationException($tag: $reason)", // TODO extract name from resource
