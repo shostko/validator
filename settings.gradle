@@ -13,4 +13,6 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name='validator'
-include ':sample', ':validator-core', ':validator-exceptions', ':validator-strings'
+include ':sample'
+include ':validator-core'
+include ':validator-exceptions', ':validator-strings', ':validator-android'

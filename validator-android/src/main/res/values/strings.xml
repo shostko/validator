@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="by_shostko_validator_always_fail">This validation always fails</string>
+    <string name="by_shostko_validator_positive">Value should be true</string>
+    <string name="by_shostko_validator_negative">Value should be false</string>
+    <string name="by_shostko_validator_not_empty_collection">Collection should not be empty</string>
+    <string name="by_shostko_validator_empty_collection">Collection should be empty</string>
+    <string name="by_shostko_validator_size">Collection size is not correct</string>
+    <string name="by_shostko_validator_size_less">Collection size is more than required</string>
+    <string name="by_shostko_validator_size_over">Collection size is less than required</string>
+    <string name="by_shostko_validator_single_item">Collection should contain only one item</string>
+    <string name="by_shostko_validator_range">The value is not in the required range</string>
+    <string name="by_shostko_validator_less">Value is more than required</string>
+    <string name="by_shostko_validator_over">Value is less than required</string>
+    <string name="by_shostko_validator_regexp">Value does not match required pattern</string>
+    <string name="by_shostko_validator_email">The e-mail address is not in a valid format</string>
+    <string name="by_shostko_validator_phone">The phone number is not in a valid format</string>
+    <string name="by_shostko_validator_ip">The ip address is not valid</string>
+    <string name="by_shostko_validator_hex">The value has not only hexadecimal digit characters</string>
+    <string name="by_shostko_validator_not_empty">Value should not be empty</string>
+    <string name="by_shostko_validator_empty">Value should be empty</string>
+    <string name="by_shostko_validator_not_blank">Value should not be blank</string>
+    <string name="by_shostko_validator_blank">Value should be blank</string>
+    <string name="by_shostko_validator_length">Value length is not as required</string>
+    <string name="by_shostko_validator_length_less">Value length is more than required</string>
+    <string name="by_shostko_validator_length_over">Value length is less than required</string>
+    <string name="by_shostko_validator_single_char">Value should contain only one char</string>
+
+</resources>
