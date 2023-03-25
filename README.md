@@ -17,6 +17,15 @@ dependencies {
 }
 ```
 
+You can also use collections of ready-to-use validators:
+```gradle
+dependencies {
+    implementation 'by.shostko:validator-exceptions:0.+' // result is Exception
+    implementation 'by.shostko:validator-strings:0.+'    // result is pure String
+    implementation 'by.shostko:validator-android:0.+'    // result is android resource id (Int) 
+}
+```
+
 ### License
 
 Released under the [Apache 2.0 license](LICENSE).
