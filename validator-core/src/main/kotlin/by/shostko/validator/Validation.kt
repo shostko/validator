@@ -14,8 +14,7 @@ class Validation<T : Any?, R : Any?>(
         holderFlowMutable.asStateFlow()
     }
     val valueFlow: Flow<T> = holderFlow
-        .filterNot { it is Holder.Initial }
-        .map { it as Holder.WithValue }
+        .mapNotNull { it as? Holder.WithValue }
         .map { it.value }
 
     // TODO switch to provided scope?
