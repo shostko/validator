@@ -3,11 +3,11 @@
 package by.shostko.validator.android
 
 class RangeValidator<T : Comparable<T>>(
-    private val tag: String? = null,
     private val start: T,
     private val end: T,
     private val startInclusive: Boolean = true,
     private val endInclusive: Boolean = true,
+    private val tag: String? = null,
     private val reason: ((T) -> Int?)? = null,
 ) : BaseValidator<T>(tag) {
 
@@ -21,8 +21,8 @@ class RangeValidator<T : Comparable<T>>(
 }
 
 class LessValidator<T : Comparable<T>>(
-    private val tag: String? = null,
     private val limit: T,
+    private val tag: String? = null,
     private val reason: ((T) -> Int?)? = null,
 ) : BaseValidator<T>(tag) {
 
@@ -34,8 +34,8 @@ class LessValidator<T : Comparable<T>>(
 }
 
 class LessOrEqualValidator<T : Comparable<T>>(
-    private val tag: String? = null,
     private val limit: T,
+    private val tag: String? = null,
     private val reason: ((T) -> Int?)? = null,
 ) : BaseValidator<T>(tag) {
 
@@ -47,8 +47,8 @@ class LessOrEqualValidator<T : Comparable<T>>(
 }
 
 class OverValidator<T : Comparable<T>>(
-    private val tag: String? = null,
     private val limit: T,
+    private val tag: String? = null,
     private val reason: ((T) -> Int?)? = null,
 ) : BaseValidator<T>(tag) {
 
@@ -60,8 +60,8 @@ class OverValidator<T : Comparable<T>>(
 }
 
 class OverLessOrEqualValidator<T : Comparable<T>>(
-    private val tag: String? = null,
     private val limit: T,
+    private val tag: String? = null,
     private val reason: ((T) -> Int?)? = null,
 ) : BaseValidator<T>(tag) {
 

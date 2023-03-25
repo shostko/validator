@@ -47,8 +47,8 @@ class BlankValidator<T : CharSequence>(
 }
 
 class LengthValidator<T : CharSequence>(
-    private val tag: String? = null,
     private val expectedLength: Int,
+    private val tag: String? = null,
     private val reason: ((T) -> String?)? = null,
 ) : BaseValidator<T>(tag) {
     override fun validate(value: T) {
@@ -59,8 +59,8 @@ class LengthValidator<T : CharSequence>(
 }
 
 class LengthLessValidator<T : CharSequence>(
-    private val tag: String? = null,
     private val limit: Int,
+    private val tag: String? = null,
     private val reason: ((T) -> String?)? = null,
 ) : BaseValidator<T>(tag) {
     override fun validate(value: T) {
@@ -71,8 +71,8 @@ class LengthLessValidator<T : CharSequence>(
 }
 
 class LengthLessOrEqualValidator<T : CharSequence>(
-    private val tag: String? = null,
     private val limit: Int,
+    private val tag: String? = null,
     private val reason: ((T) -> String?)? = null,
 ) : BaseValidator<T>(tag) {
     override fun validate(value: T) {
@@ -83,8 +83,8 @@ class LengthLessOrEqualValidator<T : CharSequence>(
 }
 
 class LengthOverValidator<T : CharSequence>(
-    private val tag: String? = null,
     private val limit: Int,
+    private val tag: String? = null,
     private val reason: ((T) -> String?)? = null,
 ) : BaseValidator<T>(tag) {
     override fun validate(value: T) {
@@ -95,8 +95,8 @@ class LengthOverValidator<T : CharSequence>(
 }
 
 class LengthOverOrEqualValidator<T : CharSequence>(
-    private val tag: String? = null,
     private val limit: Int,
+    private val tag: String? = null,
     private val reason: ((T) -> String?)? = null,
 ) : BaseValidator<T>(tag) {
     override fun validate(value: T) {

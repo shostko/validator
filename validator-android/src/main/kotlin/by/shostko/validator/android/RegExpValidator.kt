@@ -5,16 +5,16 @@ package by.shostko.validator.android
 import java.util.regex.Pattern
 
 open class RegExpValidator<T : CharSequence>(
-    private val tag: String? = null,
     private val pattern: Pattern,
+    private val tag: String? = null,
     private val reason: ((T) -> Int?)? = null,
 ) : BaseValidator<T>(tag) {
 
     constructor(
-        tag: String? = null,
         pattern: String,
+        tag: String? = null,
         reason: ((T) -> Int?)? = null,
-    ) : this(tag, Pattern.compile(pattern), reason)
+    ) : this(Pattern.compile(pattern), tag, reason)
 
     override fun validate(value: T) {
         if (!pattern.matcher(value).matches()) {
@@ -26,22 +26,22 @@ open class RegExpValidator<T : CharSequence>(
 class EmailValidator<T : CharSequence>(
     tag: String? = null,
     reason: ((T) -> Int?)? = null,
-) : RegExpValidator<T>(tag, EMAIL_ADDRESS, reason ?: { R.string.by_shostko_validator_email })
+) : RegExpValidator<T>(EMAIL_ADDRESS, tag, reason ?: { R.string.by_shostko_validator_email })
 
 class PhoneValidator<T : CharSequence>(
     tag: String? = null,
     reason: ((T) -> Int?)? = null,
-) : RegExpValidator<T>(tag, PHONE, reason ?: { R.string.by_shostko_validator_phone })
+) : RegExpValidator<T>(PHONE, tag, reason ?: { R.string.by_shostko_validator_phone })
 
 class IpValidator<T : CharSequence>(
     tag: String? = null,
     reason: ((T) -> Int?)? = null,
-) : RegExpValidator<T>(tag, IP_ADDRESS, reason ?: { R.string.by_shostko_validator_ip })
+) : RegExpValidator<T>(IP_ADDRESS, tag, reason ?: { R.string.by_shostko_validator_ip })
 
 class HexValidator<T : CharSequence>(
     tag: String? = null,
     reason: ((T) -> Int?)? = null,
-) : RegExpValidator<T>(tag, HEX, reason ?: { R.string.by_shostko_validator_hex })
+) : RegExpValidator<T>(HEX, tag, reason ?: { R.string.by_shostko_validator_hex })
 
 private const val EMAIL_ADDRESS =
     "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
