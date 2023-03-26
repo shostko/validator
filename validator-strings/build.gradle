@@ -1,0 +1,22 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+java {
+    sourceCompatibility JavaVersion.VERSION_11
+    targetCompatibility JavaVersion.VERSION_11
+}
+
+dependencies {
+    implementation project(":validator-core")
+}
+
+ext {
+    PUBLISH_GROUP_ID = "by.shostko"
+    PUBLISH_VERSION = rootProject.ext.versionName
+    PUBLISH_ARTIFACT_ID = "validator-strings"
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
+

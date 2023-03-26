@@ -1,0 +1,44 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+    implementation project(":validator-core")
+    implementation "androidx.annotation:annotation:1.6.0"
+}
+
+afterEvaluate {
+    generateReleaseBuildConfig.enabled = false
+}
+
+ext {
+    PUBLISH_GROUP_ID = "by.shostko"
+    PUBLISH_VERSION = rootProject.ext.versionName
+    PUBLISH_ARTIFACT_ID = "validator-android"
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
+

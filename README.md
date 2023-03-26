@@ -1,36 +1,108 @@
-# RxValidation
+# Validator
 
-[![Maven Central](https://img.shields.io/maven-central/v/by.shostko/rx-validation?style=flat)](#integration) [![API-level](https://img.shields.io/badge/API-14+-blue?style=flat&logo=android)](https://source.android.com/setup/start/build-numbers) [![License](https://img.shields.io/badge/license-Apach%202.0-green?style=flat)](#license) 
+![Foreman Logo](/assets/play-store.png)
+
+[![Maven Central](https://img.shields.io/maven-central/v/by.shostko/validator?style=flat)](#integration) [![API-level](https://img.shields.io/badge/API-21+-blue?style=flat&logo=android)](https://source.android.com/setup/start/build-numbers) [![License](https://img.shields.io/badge/license-Apach%202.0-green?style=flat)](#license)
 
 ## How to use
 
-// TBD
+### Create `Validation` entity
 
-## Integration
+**Simple way**
+```kotlin  
+val email by EmailValidator()  
+```  
 
-The library is now available in Maven Central repository:
-```gradle
-dependencies {
-    implementation 'by.shostko:rx-validation:0.+'
+**Composition of validators**
+```kotlin  
+val username by validators(  
+  NotEmptyValidator(),
+  LengthOverOrEqualValidator(3), 
+)
+```  
 
-    // ADD
-    // collection of implemented validators that throws simple Exception
-    implementation 'by.shostko:rx-validation-validators:0.+'
-    // OR
-    // collection of implemented validators that throws Errors
-    // see https://github.com/shostko/errors
-    implementation 'by.shostko:rx-validation-errors:0.+'
+**Your own validator**
+```kotlin  
+val username by Validator.predicate(
+  predicate = repository::checkIfUsernameAvailable,
+  reason = { th ->
+    if (th == null) {
+      "Username already taken"
+    } else {
+      th.message ?: "Error checking username on server"
+    }
+  },
+)
+```
+```kotlin
+val username by Validator.custom(
+  block = { value ->
+      if (repository.checkIfUsernameAvailable(value)) {
+          ValidationResult.valid(value)
+      } else {
+          ValidationResult.invalid(value, "Username already taken")
+      }
+  },
+  reason = { it.message ?: "Error checking username on server" },
+)
+```
+
+### Bind `Validation` to JetpackCompose `TextField`
+```kotlin    
+@Composable  
+private fun SampleTextField(  
+  label: String,  
+  validation: Validation<String, String>,  
+  modifier: Modifier = Modifier,  
+) {  
+  val value by validation.valueFlow.collectAsState("")  
+  val result by validation.resultFlow.collectAsState(ValidationResult.valid(""))  
+  OutlinedTextField(  
+    value = value,
+    onValueChange = validation::onNewValue,
+    label = { Text(label) },
+    supportingText = { SampleErrorText(result) },
+    isError = !result.isValid,
+    modifier = modifier,
+    singleLine = true,
+  )  
+}  
+  
+@Composable  
+private fun SampleErrorText(result: ValidationResult<*, *>) {  
+  if (result is ValidationResult.Invalid) {  
+    val text = when (val reason = result.reason) {  
+      is String -> reason  
+      is Int -> stringResource(reason)  
+      is ValidationException -> reason.reason  
+      is Throwable -> reason.message  
+      else -> null
+      // any other optinal way to get reason from your custom Validator 
+    }
+    Text(  
+      modifier = Modifier.fillMaxWidth(),  
+      text = text ?: "Unknown error!",  
+      textAlign = TextAlign.Start,  
+    )  
+  }
 }
 ```
 
-Also don't forget to additional mandatory dependencies:
+## Integration
+
+The library is available in Maven Central repository:
 ```gradle
 dependencies {
-    // for base module
-    implementation 'io.reactivex.rxjava2:rxjava:2.+'
+    implementation 'by.shostko:validator:0.+'
+}
+```
 
-    // for errors module integration
-    implementation 'by.shostko:error:0.+'
+You can also use collections of ready-to-use validators:
+```gradle
+dependencies {
+    implementation 'by.shostko:validator-exceptions:0.+' // result is Exception
+    implementation 'by.shostko:validator-strings:0.+'    // result is pure String
+    implementation 'by.shostko:validator-android:0.+'    // result is android resource id (Int) 
 }
 ```
 
