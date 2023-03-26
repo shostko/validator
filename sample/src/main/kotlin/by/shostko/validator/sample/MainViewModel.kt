@@ -3,13 +3,11 @@ package by.shostko.validator.sample
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import by.shostko.validator.ValidationResult
-import by.shostko.validator.Validator
+import by.shostko.validator.*
 import by.shostko.validator.strings.EmailValidator
 import by.shostko.validator.strings.LengthLessOrEqualValidator
 import by.shostko.validator.strings.LengthOverOrEqualValidator
 import by.shostko.validator.strings.NotEmptyValidator
-import by.shostko.validator.validators
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -30,17 +28,16 @@ class MainViewModel(
     val username by validators(
         NotEmptyValidator("Username.Empty") { "Username must not be empty!" },
         LengthOverOrEqualValidator(3, "Username.Length") { "Username must be at least 3 characters!" },
-        object : Validator<String, String> {
-            override suspend fun invoke(value: String): ValidationResult<String, String> = try {
+        Validator.custom<String, String>(
+            reason = { it.message ?: "Error checking username on server" },
+            block = { value ->
                 if (repository.checkIfUsernameAvailable(value)) {
                     ValidationResult.valid(value)
                 } else {
                     ValidationResult.invalid(value, "Username already taken")
                 }
-            } catch (th: Throwable) {
-                ValidationResult.invalid(value, "Error checking username on server")
-            }
-        }
+            },
+        ),
     )
 
     val password by LengthOverOrEqualValidator<String>(6, "Password") { "Password must be at least 6 characters!" }

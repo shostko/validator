@@ -1,6 +1,8 @@
 package by.shostko.validator
 
-interface Validator<T : Any?, R : Any?> : suspend (T) -> ValidationResult<T, R>
+interface Validator<T : Any?, R : Any?> : suspend (T) -> ValidationResult<T, R> {
+    companion object
+}
 
 private class CompositeValidator<T : Any?, R : Any?>(
     private vararg val validators: Validator<T, R>,
