@@ -23,18 +23,29 @@ val username by validators(
 
 **Your own validator**
 ```kotlin  
-val username = Validation(
-  object : Validator<String, String> {  
-    override suspend fun invoke(value: String): ValidationResult<String, String> =
-      if (repository.checkIfUsernameAvailable(value)) {
-        // you can even make network request here
-        ValidationResult.valid(value)  
-      } else {  
-        ValidationResult.invalid(value, "Username already taken")  
-      }  
-  }
+val username by Validator.predicate(
+  predicate = repository::checkIfUsernameAvailable,
+  reason = { th ->
+    if (th == null) {
+      "Username already taken"
+    } else {
+      th.message ?: "Error checking username on server"
+    }
+  },
 )
-```  
+```
+```kotlin
+val username by Validator.custom(
+  block = { value ->
+      if (repository.checkIfUsernameAvailable(value)) {
+          ValidationResult.valid(value)
+      } else {
+          ValidationResult.invalid(value, "Username already taken")
+      }
+  },
+  reason = { it.message ?: "Error checking username on server" },
+)
+```
 
 ### Bind `Validation` to JetpackCompose `TextField`
 ```kotlin    
