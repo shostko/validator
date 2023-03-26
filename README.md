@@ -6,7 +6,76 @@
 
 ## How to use
 
-// TBD
+### Create `Validation` entity
+
+**Simple way**
+```kotlin  
+val email by EmailValidator()  
+```  
+
+**Composition of validators**
+```kotlin  
+val username by validators(  
+  NotEmptyValidator(),
+  LengthOverOrEqualValidator(3), 
+)
+```  
+
+**Your own validator**
+```kotlin  
+val username = Validation(
+  object : Validator<String, String> {  
+    override suspend fun invoke(value: String): ValidationResult<String, String> =
+      if (repository.checkIfUsernameAvailable(value)) {
+        // you can even make network request here
+        ValidationResult.valid(value)  
+      } else {  
+        ValidationResult.invalid(value, "Username already taken")  
+      }  
+  }
+)
+```  
+
+### Bind `Validation` to JetpackCompose `TextField`
+```kotlin    
+@Composable  
+private fun SampleTextField(  
+  label: String,  
+  validation: Validation<String, String>,  
+  modifier: Modifier = Modifier,  
+) {  
+  val value by validation.valueFlow.collectAsState("")  
+  val result by validation.resultFlow.collectAsState(ValidationResult.valid(""))  
+  OutlinedTextField(  
+    value = value,
+    onValueChange = validation::onNewValue,
+    label = { Text(label) },
+    supportingText = { SampleErrorText(result) },
+    isError = !result.isValid,
+    modifier = modifier,
+    singleLine = true,
+  )  
+}  
+  
+@Composable  
+private fun SampleErrorText(result: ValidationResult<*, *>) {  
+  if (result is ValidationResult.Invalid) {  
+    val text = when (val reason = result.reason) {  
+      is String -> reason  
+      is Int -> stringResource(reason)  
+      is ValidationException -> reason.reason  
+      is Throwable -> reason.message  
+      else -> null
+      // any other optinal way to get reason from your custom Validator 
+    }
+    Text(  
+      modifier = Modifier.fillMaxWidth(),  
+      text = text ?: "Unknown error!",  
+      textAlign = TextAlign.Start,  
+    )  
+  }
+}
+```
 
 ## Integration
 
