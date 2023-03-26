@@ -11,3 +11,12 @@ java {
 dependencies {
     implementation project(":validator-core")
 }
+
+ext {
+    PUBLISH_GROUP_ID = "by.shostko"
+    PUBLISH_VERSION = rootProject.ext.versionName
+    PUBLISH_ARTIFACT_ID = "validator-exceptions"
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
+

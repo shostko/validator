@@ -11,3 +11,11 @@ java {
 dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta"
 }
+
+ext {
+    PUBLISH_GROUP_ID = "by.shostko"
+    PUBLISH_VERSION = rootProject.ext.versionName
+    PUBLISH_ARTIFACT_ID = "validator"
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"

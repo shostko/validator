@@ -33,3 +33,12 @@ dependencies {
 afterEvaluate {
     generateReleaseBuildConfig.enabled = false
 }
+
+ext {
+    PUBLISH_GROUP_ID = "by.shostko"
+    PUBLISH_VERSION = rootProject.ext.versionName
+    PUBLISH_ARTIFACT_ID = "validator-android"
+}
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
+
